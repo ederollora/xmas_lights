@@ -51,7 +51,7 @@ def lightshow_view():
     return "lightshow started"
 
 @app.route("/randomshow", methods=["GET"])
-def randomshow_view():
+def random_view():
     any(thread.pause() for thread in threads)
     if not randshow_thread.isAlive():
         randshow_thread.start()
@@ -67,7 +67,7 @@ def allon_view():
     return "allon show started"
 
 @app.route("/simpleshow", methods=['GET'])
-def allon_view():
+def simple_view():
     any(thread.pause() for thread in threads)
     if not simple_thread.isAlive():
         simple_thread.start()
