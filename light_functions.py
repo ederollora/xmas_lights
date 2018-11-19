@@ -126,6 +126,7 @@ def randomshow(*, pin_numbers: list, iterations=1, sleep=2) -> None:
             iterations -= 1
 
 def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
+
     for pin in pin_numbers:
         on(pin)
     time.sleep(sleep)
@@ -173,6 +174,7 @@ def light_show():
         sleep=random_sleep)
 
 def random_show():
+    print pin_numbers
     randomshow(pin_numbers=pin_numbers)
 
 def allon_show():
