@@ -66,6 +66,14 @@ def allon_view():
     allon_thread.resume()
     return "allon show started"
 
+@app.route("/simpleshow", methods=['GET'])
+def allon_view():
+    any(thread.pause() for thread in threads)
+    if not simple_thread.isAlive():
+        simple_thread.start()
+    simple_thread.resume()
+    return "simple show started"
+
 @app.route("/shutdown", methods=['GET'])
 def shutdown():
     all_pins_off()
@@ -75,10 +83,11 @@ def shutdown():
 
 if __name__ == '__main__':
     # Create threads
-    blink_thread = RaspberryThread(function=blink_all)
+    blink_thread = RaspberryThread(function=ojeblink)
     allon_thread = RaspberryThread(function=allon_show)
     randshow_thread = RaspberryThread(function=random_show)
-    lightshow_thread = RaspberryThread(function=lightshow)
+    lightshow_thread = RaspberryThread(function=light_show)
+    simple_thread =  RaspberryThread(function=simple_show)
     cycle_all_thread = RaspberryThread(function=cycle_all)
 
     # collect threads
