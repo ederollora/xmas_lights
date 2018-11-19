@@ -188,7 +188,7 @@ def cycle_all():
 def all_pins_off():
     """Turn off all pins"""
     any(off(pin) for pin in pin_numbers)
-    sleep(1)
+    time.sleep(1)
 
 def round_robin_even(n):
     d = deque(range(n))
