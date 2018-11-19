@@ -11,6 +11,8 @@ GPIO.setwarnings(False)
 # Set pin mapping to board, use GPIO numbers not pin numbers
 GPIO.setmode(GPIO.BCM)
 
+GPIO.cleanup()
+
 
 class Pin(object):
     def __init__(self, pin_number, jumper_color, relay_number):
@@ -124,10 +126,8 @@ def randomshow(*, pin_numbers: list, iterations=1, sleep=2) -> None:
             iterations -= 1
 
 def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
-
     for pin in pin_numbers:
         on(pin)
-
     time.sleep(sleep)
 
 def simpleshow(*, pin_numbers: list, iterations=10, sleep=1) -> None:

@@ -82,6 +82,11 @@ def shutdown():
     any(thread.pause() for thread in threads)
     return "all threads paused"
 
+@app.route("/showthreads", methods=['GET'])
+def showthreads():
+    any(print(thread.paused) for thread in threads)
+    return "checking paused stated"
+
 
 if __name__ == '__main__':
     # Create threads
