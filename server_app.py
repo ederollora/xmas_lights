@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from raspberry import RaspberryThread
-from light_functions import ojeblink, all_pins_off, light_show, cycle_all, allon_show, random_show, simple_show
+from light_functions import ojeblink, all_pins_off, light_show,\
+cycle_all, allon_show, random_show, simple_show, cleanup
 import os
 
 # Load the env variables
@@ -37,6 +38,7 @@ def blink_view():
 def cycleall_view():
     any(thread.pause() for thread in threads)
     if not cycle_all_thread.isAlive():
+
         cycle_all_thread.start()
     cycle_all_thread.resume()
     return "cycle all started"

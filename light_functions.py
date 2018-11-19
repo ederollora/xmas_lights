@@ -4,12 +4,6 @@ from itertools import permutations
 import time
 import random
 
-# Pins to use
-# 5, 6, 13, 19, 26, 16
-
-#################
-#   GPIO SETUP  #
-#################
 
 # Turn off warnings
 GPIO.setwarnings(False)
@@ -100,21 +94,20 @@ def climb(*, pin_numbers: list, iterations=1, sleep=2) -> None:
             time.sleep(sleep)
         iterations -= 1
 
-def randomshow(*, pin_numbers: list, iterations=10, sleep=2) -> None:
+def randomshow(*, pin_numbers: list, iterations=1, sleep=2) -> None:
 
     FIRST_GROUP = 0
     SECOND_GROUP = 1
     FIRST_LIGHT = 0
     SECOND_LIGHT = 1
 
-    random_pins = pin_numbers
-    random.shuffle(random_pins)
+    #random_pins = pin_numbers
+    #random.shuffle(random_pins)
 
     random_pins = round_robin_even(len(pin_numbers))
     random.shuffle(random_pins)
 
     for kb in random_pins:
-        time.sleep(1)
         while iterations > 0:
             if iterations % 2 == 0:
                 on(kb[FIRST_GROUP][FIRST_LIGHT])
@@ -131,11 +124,8 @@ def randomshow(*, pin_numbers: list, iterations=10, sleep=2) -> None:
             iterations -= 1
 
 def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
-    while iterations > 0:
-        for pin in pin_numbers:
-            on(pin)
-            time.sleep(sleep)
-        iterations -= 1
+    any(on(pin_number) for pin_number in pin_numbers)
+    time.sleep(sleep)
 
 def simpleshow(*, pin_numbers: list, iterations=10, sleep=1) -> None:
     while iterations > 0:
@@ -198,6 +188,7 @@ def cycle_all():
 def all_pins_off():
     """Turn off all pins"""
     any(off(pin) for pin in pin_numbers)
+    sleep(1)
 
 def round_robin_even(n):
     d = deque(range(n))
@@ -205,3 +196,6 @@ def round_robin_even(n):
         yield [[d[j], d[-j-1]] for j in range(n//2)]
         d[0], d[-1] = d[-1], d[0]
         d.rotate()
+
+def cleanup():
+    GPIO.cleanup()
