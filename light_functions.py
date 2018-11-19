@@ -41,6 +41,9 @@ relay_pin_map = dict(zip(relay_numbers, pin_numbers))
 on = lambda pin: GPIO.output(pin, GPIO.LOW)
 off = lambda pin: GPIO.output(pin, GPIO.HIGH)
 
+reverse = lambda pin: reverse_light(pin)
+
+
 # "any" function executes the function on the iterator but doesn't return anything
 # This is the same as "for pin in pins: GPIO.setup"
 for pin in pin_numbers:
@@ -50,7 +53,7 @@ for pin in pin_numbers:
 #    GPIO FUNCTIONS  #
 ######################
 
-def reverse(pin_number):
+def reverse_light(pin_number):
     it_is_on = GPIO.input(pin_number)
 
     if it_is_on:
@@ -166,6 +169,7 @@ def lightshow():
 
 def blink_all():
     all_pins_off()
+    time.sleep(1)
     """Turn all pins on, sleep, turn all pins off"""
     any(reverse(pin) for pin in pin_numbers)
     time.sleep(1)
