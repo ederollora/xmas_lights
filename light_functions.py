@@ -62,7 +62,6 @@ def reverse_light(pin_number):
         on(pin_number)
 
 def super_blink(*, pin_numbers: list, iterations=1, sleep=2) -> None:
-    all_pins_off()
     while iterations > 0:
         any(reverse(pin_number) for pin_number in pin_numbers)
         time.sleep(sleep)
@@ -72,7 +71,6 @@ def super_blink(*, pin_numbers: list, iterations=1, sleep=2) -> None:
 
 def blink(*, pin_numbers: list, iterations=1, sleep=2) -> None:
     """Turn all pins on, sleep, turn all pins off"""
-    all_pins_off()
     while iterations > 0:
         any(on(pin_number) for pin_number in pin_numbers)
         time.sleep(sleep)
@@ -114,10 +112,11 @@ def random_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
     SECOND_LIGHT = 1
 
     id_seq = random.shuffle(pin_numbers)
-    seq = random.shuffle(round_robin_even(len(pin_numbers)))
+    random_pins = round_robin_even(len(pin_numbers))
 
-    for kb in seq:
-        all_pins_off()
+    random.shuffle(random_pins)
+
+    for kb in random_pins:
         time.sleep(1)
         while iterations > 0:
             on(kb[FIRST_GROUP][FIRST_LIGHT]) and on(kb[FIRST_GROUP][SECOND_LIGHT])
@@ -129,7 +128,6 @@ def random_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
             iterations -= 1
 
 def allon_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
-    all_pins_off()
     time.sleep(sleep)
     for pin in pin_numbers:
         on(pin)
@@ -168,7 +166,6 @@ def lightshow():
         sleep=random_sleep)
 
 def blink_all():
-    all_pins_off()
     time.sleep(1)
     """Turn all pins on, sleep, turn all pins off"""
     any(reverse(pin) for pin in pin_numbers)
