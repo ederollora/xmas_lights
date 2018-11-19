@@ -103,30 +103,37 @@ def climb(*, pin_numbers: list, iterations=1, sleep=2) -> None:
             time.sleep(sleep)
         iterations -= 1
 
-def randomshow(* pin_numbers: list, iterations=10, sleep=2) -> None:
+def randomshow(*, pin_numbers: list, iterations=10, sleep=2) -> None:
 
     FIRST_GROUP = 0
     SECOND_GROUP = 1
     FIRST_LIGHT = 0
     SECOND_LIGHT = 1
 
-    id_seq = random.shuffle(pin_numbers)
-    random_pins = round_robin_even(len(pin_numbers))
+    random_pins = pin_numbers
+    random.shuffle(random_pins)
 
+    random_pins = round_robin_even(len(pin_numbers))
     random.shuffle(random_pins)
 
     for kb in random_pins:
         time.sleep(1)
         while iterations > 0:
-            on(kb[FIRST_GROUP][FIRST_LIGHT]) and on(kb[FIRST_GROUP][SECOND_LIGHT])
-            off(kb[SECOND_GROUP][FIRST_LIGHT]) and off(kb[SECOND_GROUP][SECOND_LIGHT])
-            time.sleep(sleep)
-            off(kb[FIRST_GROUP][FIRST_LIGHT]) and off(kb[FIRST_GROUP][SECOND_LIGHT])
-            on(kb[SECOND_GROUP][FIRST_LIGHT]) and on(kb[SECOND_GROUP][SECOND_LIGHT])
+            if iterations % 2 == 0:
+                on(kb[FIRST_GROUP][FIRST_LIGHT])
+                on(kb[FIRST_GROUP][SECOND_LIGHT])
+                off(kb[SECOND_GROUP][FIRST_LIGHT])
+                off(kb[SECOND_GROUP][SECOND_LIGHT])
+            else:
+                off(kb[FIRST_GROUP][FIRST_LIGHT])
+                off(kb[FIRST_GROUP][SECOND_LIGHT])
+                on(kb[SECOND_GROUP][FIRST_LIGHT])
+                on(kb[SECOND_GROUP][SECOND_LIGHT])
+
             time.sleep(sleep)
             iterations -= 1
 
-def allonshow(* pin_numbers: list, iterations=1, sleep=2) -> None:
+def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
     all_pins_off()
     while iterations > 0:
         for pin in pin_numbers:
@@ -134,15 +141,19 @@ def allonshow(* pin_numbers: list, iterations=1, sleep=2) -> None:
             time.sleep(sleep)
         iterations -= 1
 
-def simpleshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
+def simpleshow(*, pin_numbers: list, iterations=10, sleep=1) -> None:
     all_pins_off()
     while iterations > 0:
         if (iterations % 2 == 0):
-            on(pin_numbers[0]) and on(pin_numbers[2])
-            off(pin_numbers[1]) and off(pin_numbers[3])
+            on(pin_numbers[0])
+            on(pin_numbers[2])
+            off(pin_numbers[1])
+            off(pin_numbers[3])
         else:
-            off(pin_numbers[0]) and off(pin_numbers[2])
-            on(pin_numbers[1]) and on(pin_numbers[3])
+            off(pin_numbers[0])
+            off(pin_numbers[2])
+            on(pin_numbers[1])
+            on(pin_numbers[3])
 
         time.sleep(sleep)
         iterations -= 1
