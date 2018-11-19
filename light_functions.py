@@ -60,7 +60,6 @@ def reverse_light(pin_number):
         on(pin_number)
 
 def super_blink(*, pin_numbers: list, iterations=1, sleep=1) -> None:
-    all_pins_off()
     while iterations > 0:
         any(on(pin_number) for pin_number in pin_numbers)
         time.sleep(sleep)
@@ -79,7 +78,6 @@ def blink(*, pin_numbers: list, iterations=1, sleep=2) -> None:
 
 def step(*, pin_numbers: list, iterations=1, sleep=1.5) -> None:
     """Turn a pin on then off then move onto the next pin"""
-    all_pins_off()
     while iterations > 0:
         for pin in pin_numbers:
             on(pin)
@@ -89,7 +87,6 @@ def step(*, pin_numbers: list, iterations=1, sleep=1.5) -> None:
 
 def climb(*, pin_numbers: list, iterations=1, sleep=2) -> None:
     """Turn the pins on in order then off in reverse"""
-    all_pins_off()
     climb_number = len(pin_numbers)
     reversed_pin_numbers = reversed(pin_numbers)
 
@@ -134,7 +131,6 @@ def randomshow(*, pin_numbers: list, iterations=10, sleep=2) -> None:
             iterations -= 1
 
 def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
-    all_pins_off()
     while iterations > 0:
         for pin in pin_numbers:
             on(pin)
@@ -142,7 +138,6 @@ def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
         iterations -= 1
 
 def simpleshow(*, pin_numbers: list, iterations=10, sleep=1) -> None:
-    all_pins_off()
     while iterations > 0:
         if (iterations % 2 == 0):
             on(pin_numbers[0])

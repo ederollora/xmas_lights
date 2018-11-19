@@ -64,7 +64,7 @@ def allon_view():
     if not allon_thread.isAlive():
         allon_thread.start()
     allon_thread.resume()
-    return "allon show started"
+    return "all on show started"
 
 @app.route("/simpleshow", methods=['GET'])
 def simple_view():
