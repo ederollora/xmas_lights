@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from raspberry import RaspberryThread
-from light_functions import blink_all, all_pins_off, lightshow, cycle_all
+from light_functions import blink_all, all_pins_off, lightshow, cycle_all, allon_show, random_show
 import os
 
 # Load the env variables
@@ -76,7 +76,7 @@ def shutdown():
 if __name__ == '__main__':
     # Create threads
     blink_thread = RaspberryThread(function=blink_all)
-    allon_thread = RaspberryThread(function=allon)
+    allon_thread = RaspberryThread(function=allon_show)
     randshow_thread = RaspberryThread(function=random_show)
     lightshow_thread = RaspberryThread(function=lightshow)
     cycle_all_thread = RaspberryThread(function=cycle_all)

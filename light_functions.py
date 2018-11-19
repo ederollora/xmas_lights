@@ -51,7 +51,7 @@ for pin in pin_numbers:
 ######################
 
 def reverse(pin_number):
-    it_is_on = GPIO.input(pin_number):
+    it_is_on = GPIO.input(pin_number)
 
     if it_is_on:
         off(pin_number)
@@ -125,7 +125,7 @@ def random_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
             time.sleep(sleep)
             iterations -= 1
 
-def allon(* pin_numbers: list, iterations=10, sleep=2) -> None:
+def allon_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
     all_pins_off()
     time.sleep(sleep)
     for pin in pin_numbers:
