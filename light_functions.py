@@ -127,11 +127,14 @@ def random_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
             time.sleep(sleep)
             iterations -= 1
 
-def allon_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
-    print("Currently in ALL ON show")
-    for pin in pin_numbers:
-        on(pin)
-        time.sleep(1)
+def allon_show(* pin_numbers: list, iterations=1, sleep=2) -> None:
+    """Turn a pin on then off then move onto the next pin"""
+    all_pins_off()
+    while iterations > 0:
+        for pin in pin_numbers:
+            on(pin)
+            time.sleep(sleep)
+        iterations -= 1
 
 
 def round_robin_even(n):
