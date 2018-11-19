@@ -128,9 +128,11 @@ def random_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
             iterations -= 1
 
 def allon_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
-    time.sleep(sleep)
+    print("Currently in ALL ON show")
     for pin in pin_numbers:
         on(pin)
+        time.sleep(1)
+
 
 def round_robin_even(n):
     d = deque(range(n))
