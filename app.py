@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 from raspberry import RaspberryThread
 from light_functions import blink_all, all_pins_off, lightshow, cycle_all
-from xmas import russian_xmas
 import os
 
 # Load the env variables
@@ -51,15 +50,21 @@ def lightshow_view():
     lightshow_thread.resume()
     return "lightshow started"
 
-
-@app.route("/russianxmas", methods=["GET"])
-def russianxmas_view():
+@app.route("/randomshow", methods=["GET"])
+def randomshow_view():
     any(thread.pause() for thread in threads)
-    if not russian_xmas_thread.isAlive():
-        russian_xmas_thread.start()
-    russian_xmas_thread.resume()
-    return "russian xmas started"
+    if not randshow_thread.isAlive():
+        randshow_thread.start()
+    randshow_thread.resume()
+    return "random show started"
 
+@app.route("/allon", methods=['GET'])
+def allon_view():
+    any(thread.pause() for thread in threads)
+    if not allon_thread.isAlive():
+        allon_thread.start()
+    allon_thread.resume()
+    return "allon show started"
 
 @app.route("/shutdown", methods=['GET'])
 def shutdown():
@@ -71,21 +76,31 @@ def shutdown():
 if __name__ == '__main__':
     # Create threads
     blink_thread = RaspberryThread(function=blink_all)
+    allon_thread = RaspberryThread(function=allon)
+    randshow_thread = RaspberryThread(function=random_show)
     lightshow_thread = RaspberryThread(function=lightshow)
-    russian_xmas_thread = RaspberryThread(function=russian_xmas)
     cycle_all_thread = RaspberryThread(function=cycle_all)
 
     # collect threads
     threads = [
         blink_thread,
+        allon_thread,
+        randshow_thread,
         lightshow_thread,
-        russian_xmas_thread,
         cycle_all_thread
     ]
 
     # Run server
-    app.run(
-        debug=True,
-        host=os.environ.get("IP_ADDRESS"),
-        port=int(os.environ.get("PORT")),
-        threaded=True)
+    try:
+        app.run(
+            debug=True,
+            host='0.0.0.0',
+            port=5000,
+            threaded=True
+        )
+    except KeyboardInterrupt:
+        print('Interrupted')
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)

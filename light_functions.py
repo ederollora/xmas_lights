@@ -1,4 +1,6 @@
 import RPi.GPIO as GPIO
+from collections import deque
+from itertools import permutations
 import time
 import random
 
@@ -22,16 +24,13 @@ class Pin(object):
         self.jumper_color = jumper_color
         self.relay_number = relay_number
 
-pin1 = Pin(pin_number=5, jumper_color="green", relay_number=1)
-pin2 = Pin(pin_number=6, jumper_color="orange", relay_number=2)
-pin3 = Pin(pin_number=13, jumper_color="purple", relay_number=3)
-pin4 = Pin(pin_number=19, jumper_color="blue", relay_number=4)
-pin5 = Pin(pin_number=26, jumper_color="white", relay_number=5)
-pin6 = Pin(pin_number=16, jumper_color="brown", relay_number=6)
+pin1 = Pin(pin_number=17, jumper_color="blue", relay_number=1)
+pin2 = Pin(pin_number=18, jumper_color="yellow", relay_number=2)
+pin3 = Pin(pin_number=27, jumper_color="purple", relay_number=3)
+pin4 = Pin(pin_number=22, jumper_color="green", relay_number=4)
 
 pins = [
-    pin1, pin2, pin3,
-    pin4, pin5, pin6,
+    pin1, pin2, pin3, pin4,
 ]
 
 pin_numbers = [pin.pin_number for pin in pins]
@@ -51,9 +50,26 @@ for pin in pin_numbers:
 #    GPIO FUNCTIONS  #
 ######################
 
+def reverse(pin_number):
+    it_is_on = GPIO.input(pin_number):
 
-def blink(*, pin_numbers: list, iterations=1, sleep=0.5) -> None:
+    if it_is_on:
+        off(pin_number)
+    else:
+        on(pin_number)
+
+def super_blink(*, pin_numbers: list, iterations=1, sleep=2) -> None:
+    all_pins_off()
+    while iterations > 0:
+        any(reverse(pin_number) for pin_number in pin_numbers)
+        time.sleep(sleep)
+        any(reverse(pin_number) for pin_number in pin_numbers)
+        time.sleep(sleep)
+        iterations -= 1
+
+def blink(*, pin_numbers: list, iterations=1, sleep=2) -> None:
     """Turn all pins on, sleep, turn all pins off"""
+    all_pins_off()
     while iterations > 0:
         any(on(pin_number) for pin_number in pin_numbers)
         time.sleep(sleep)
@@ -61,9 +77,9 @@ def blink(*, pin_numbers: list, iterations=1, sleep=0.5) -> None:
         time.sleep(sleep)
         iterations -= 1
 
-
-def step(*, pin_numbers: list, iterations=1, sleep=0.5) -> None:
+def step(*, pin_numbers: list, iterations=1, sleep=1.5) -> None:
     """Turn a pin on then off then move onto the next pin"""
+    all_pins_off()
     while iterations > 0:
         for pin in pin_numbers:
             on(pin)
@@ -71,9 +87,9 @@ def step(*, pin_numbers: list, iterations=1, sleep=0.5) -> None:
             off(pin)
         iterations -= 1
 
-
-def climb(*, pin_numbers: list, iterations=1, sleep=0.5) -> None:
+def climb(*, pin_numbers: list, iterations=1, sleep=2) -> None:
     """Turn the pins on in order then off in reverse"""
+    all_pins_off()
     climb_number = len(pin_numbers)
     reversed_pin_numbers = reversed(pin_numbers)
 
@@ -87,6 +103,40 @@ def climb(*, pin_numbers: list, iterations=1, sleep=0.5) -> None:
             time.sleep(sleep)
         iterations -= 1
 
+def random_show(* pin_numbers: list, iterations=10, sleep=2) -> None:
+
+    FIRST_GROUP = 0
+    SECOND_GROUP = 1
+    FIRST_LIGHT = 0
+    SECOND_LIGHT = 1
+
+    id_seq = random.shuffle(pin_numbers)
+    seq = random.shuffle(round_robin_even(len(pin_numbers)))
+
+    for kb in seq:
+        all_pins_off()
+        time.sleep(1)
+        while iterations > 0:
+            on(kb[FIRST_GROUP][FIRST_LIGHT]) and on(kb[FIRST_GROUP][SECOND_LIGHT])
+            off(kb[SECOND_GROUP][FIRST_LIGHT]) and off(kb[SECOND_GROUP][SECOND_LIGHT])
+            time.sleep(sleep)
+            off(kb[FIRST_GROUP][FIRST_LIGHT]) and off(kb[FIRST_GROUP][SECOND_LIGHT])
+            on(kb[SECOND_GROUP][FIRST_LIGHT]) and on(kb[SECOND_GROUP][SECOND_LIGHT])
+            time.sleep(sleep)
+            iterations -= 1
+
+def allon(* pin_numbers: list, iterations=10, sleep=2) -> None:
+    all_pins_off()
+    time.sleep(sleep)
+    for pin in pin_numbers:
+        on(pin)
+
+def round_robin_even(n):
+    d = deque(range(n))
+    for i in range(n - 1):
+        yield [[d[j], d[-j-1]] for j in range(n//2)]
+        d[0], d[-1] = d[-1], d[0]
+        d.rotate()
 
 def lightshow():
     """
@@ -100,12 +150,12 @@ def lightshow():
     random_pin = [random.choice(pin_numbers)]
     first_half_pins = pin_numbers[:int(len(pin_numbers) / 2)]
     second_half_pins = pin_numbers[int(len(pin_numbers) / 2):]
-    random_sleep = float(str(random.uniform(.1, .5))[:4])
+    random_sleep = float(str(random.uniform(1, 2))[:4])
     random_iterations = random.choice(list(range(5)))
 
-    functions = [blink, step, climb]
+    functions = [super_blink, step, climb]
     pin_configs = [
-        all_pins, even_pins, odd_pins, 
+        all_pins, even_pins, odd_pins,
         first_half_pins, second_half_pins, random_pin
     ]
 
@@ -114,13 +164,13 @@ def lightshow():
         iterations=random_iterations,
         sleep=random_sleep)
 
-
 def blink_all():
+    all_pins_off()
     """Turn all pins on, sleep, turn all pins off"""
-    any(on(pin) for pin in pin_numbers)
-    time.sleep(0.5)
-    any(off(pin) for pin in pin_numbers)
-    time.sleep(0.5)
+    any(reverse(pin) for pin in pin_numbers)
+    time.sleep(1)
+    any(reverse(pin) for pin in pin_numbers)
+    time.sleep(1)
 
 def cycle_all():
     """Turn all pins on in order, sleep, turn all pins off in reverse order"""
