@@ -124,7 +124,10 @@ def randomshow(*, pin_numbers: list, iterations=1, sleep=2) -> None:
             iterations -= 1
 
 def allonshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
-    any(on(pin_number) for pin_number in pin_numbers)
+
+    for pin in pin_numbers:
+        on(pin)
+
     time.sleep(sleep)
 
 def simpleshow(*, pin_numbers: list, iterations=10, sleep=1) -> None:
