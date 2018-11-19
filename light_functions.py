@@ -147,13 +147,6 @@ def simpleshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
         time.sleep(sleep)
         iterations -= 1
 
-def round_robin_even(n):
-    d = deque(range(n))
-    for i in range(n - 1):
-        yield [[d[j], d[-j-1]] for j in range(n//2)]
-        d[0], d[-1] = d[-1], d[0]
-        d.rotate()
-
 def light_show():
     """
     Choose a random light function
@@ -199,3 +192,10 @@ def cycle_all():
 def all_pins_off():
     """Turn off all pins"""
     any(off(pin) for pin in pin_numbers)
+
+def round_robin_even(n):
+    d = deque(range(n))
+    for i in range(n - 1):
+        yield [[d[j], d[-j-1]] for j in range(n//2)]
+        d[0], d[-1] = d[-1], d[0]
+        d.rotate()
