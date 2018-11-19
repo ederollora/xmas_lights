@@ -138,11 +138,11 @@ def simpleshow(*, pin_numbers: list, iterations=1, sleep=1) -> None:
     all_pins_off()
     while iterations > 0:
         if (iterations % 2 == 0):
-            on(pin_number[0]) and on(pin_number[2])
-            off(pin_number[1]) and off(pin_number[3])
+            on(pin_numbers[0]) and on(pin_numbers[2])
+            off(pin_numbers[1]) and off(pin_numbers[3])
         else:
-            off(pin_number[0]) and off(pin_number[2])
-            on(pin_number[1]) and on(pin_number[3])
+            off(pin_numbers[0]) and off(pin_numbers[2])
+            on(pin_numbers[1]) and on(pin_numbers[3])
 
         time.sleep(sleep)
         iterations -= 1
