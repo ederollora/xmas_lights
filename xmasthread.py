@@ -2,11 +2,11 @@ import threading
 
 class ChristmasLightThread(threading.Thread):
     def __init__(self, name, function):
+        super(ChristmasLightThread, self).__init__()
         self.paused = True
         self.state = threading.Condition()
         self.function = function
         self.name = name
-        super(ChristmasLightThread, self).__init__()
 
     def start(self):
         super(ChristmasLightThread, self).start()
