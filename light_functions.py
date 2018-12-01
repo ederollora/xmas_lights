@@ -16,6 +16,7 @@ class Pin(object):
         self.pin_number = pin_number
         self.jumper_color = jumper_color
         self.relay_number = relay_number
+        self.status = None
 
 pin1 = Pin(pin_number=17, jumper_color="blue", relay_number=1)
 pin2 = Pin(pin_number=27, jumper_color="yellow", relay_number=2)
@@ -93,17 +94,14 @@ def climb(*, pin_numbers: list, iterations=1, sleep=2) -> None:
             time.sleep(sleep)
         iterations -= 1
 
-def randomshow(*, pin_numbers: list, iterations=1, sleep=2) -> None:
+def randomshow(*, pin_numbers: list, iterations=2, sleep=1) -> None:
 
     FIRST_GROUP = 0
     SECOND_GROUP = 1
     FIRST_LIGHT = 0
     SECOND_LIGHT = 1
 
-    #random_pins = pin_numbers
-    #random.shuffle(random_pins)
-
-    random_pins = round_robin_even(len(pin_numbers))
+    random_pins = list(round_robin_even(len(pin_numbers)))
     random.shuffle(random_pins)
 
     for kb in random_pins:
@@ -170,7 +168,6 @@ def light_show():
         sleep=random_sleep)
 
 def random_show():
-    print(pin_numbers)
     randomshow(pin_numbers=pin_numbers)
 
 def allon_show():

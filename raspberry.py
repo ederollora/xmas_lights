@@ -1,14 +1,15 @@
 import threading
 
-class RaspberryThread(threading.Thread):
-    def __init__(self, function):
+class ChristmasLightThread(threading.Thread):
+    def __init__(self, function, name):
         self.paused = True
         self.state = threading.Condition()
         self.function = function
-        super(RaspberryThread, self).__init__()
+        self.name = name
+        super(ChristmasLightThread, self).__init__()
 
     def start(self):
-        super(RaspberryThread, self).start()
+        super(ChristmasLightThread, self).start()
 
     def run(self):
         # self.resume() #unpause self
@@ -17,7 +18,7 @@ class RaspberryThread(threading.Thread):
                 if self.paused:
                     self.state.wait() #block until notifed
             while not self.paused:
-                # Call function 
+                # Call function
                 self.function()
 
     def resume(self):
@@ -28,3 +29,9 @@ class RaspberryThread(threading.Thread):
     def pause(self):
         with self.state:
             self.paused = True
+
+    def __repr__(self):
+        return "ChristmasLightThread()"
+
+    def __str__(self):
+        return "Thread: "+self.state+" , Paused: "+seld.state

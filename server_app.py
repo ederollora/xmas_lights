@@ -23,26 +23,19 @@ def index():
 
 @app.route("/blink", methods=['GET'])
 def blink_view():
-    # Pause any running threads
     any(thread.pause() for thread in threads)
-
-    # Start the target thread if it is not running
     if not blink_thread.isAlive():
         blink_thread.start()
-    # Unpause the thread and thus execute its function
     blink_thread.resume()
-    return "blink started"
-
+    return "Blinking started"
 
 @app.route("/cycleall", methods=["GET"])
 def cycleall_view():
     any(thread.pause() for thread in threads)
     if not cycle_all_thread.isAlive():
-
         cycle_all_thread.start()
     cycle_all_thread.resume()
-    return "cycle all started"
-
+    return "Cycle all started"
 
 @app.route("/lightshow", methods=["GET"])
 def lightshow_view():
@@ -58,7 +51,7 @@ def random_view():
     if not randshow_thread.isAlive():
         randshow_thread.start()
     randshow_thread.resume()
-    return "random show started"
+    return "Random show started"
 
 @app.route("/allon", methods=['GET'])
 def allon_view():
@@ -66,7 +59,7 @@ def allon_view():
     if not allon_thread.isAlive():
         allon_thread.start()
     allon_thread.resume()
-    return "all on show started"
+    return "All on started"
 
 @app.route("/simpleshow", methods=['GET'])
 def simple_view():
@@ -78,31 +71,31 @@ def simple_view():
 
 @app.route("/shutdown", methods=['GET'])
 def shutdown():
-    all_pins_off()
     any(thread.pause() for thread in threads)
-    return "all threads paused"
+    all_pins_off()
+    return "All threads paused and lights shut down"
 
 @app.route("/showthreads", methods=['GET'])
 def showthreads():
-    any(print(thread.paused) for thread in threads)
-    return "checking paused stated"
+    any(print(thread) for thread in threads)
+    return "checking thread stated"
 
 
 if __name__ == '__main__':
     # Create threads
-    blink_thread = RaspberryThread(function=ojeblink)
-    allon_thread = RaspberryThread(function=allon_show)
-    randshow_thread = RaspberryThread(function=random_show)
-    lightshow_thread = RaspberryThread(function=light_show)
-    simple_thread =  RaspberryThread(function=simple_show)
-    cycle_all_thread = RaspberryThread(function=cycle_all)
-
+    blink_thread = ChristmasLightThread(function=ojeblink, "Ojeblink")
+    allon_thread = ChristmasLightThread(function=allon_show, "All Lights On")
+    randshow_thread = ChristmasLightThread(function=random_show, "Random Show")
+    lightshow_thread = ChristmasLightThread(function=light_show, "Light Show")
+    simple_thread =  ChristmasLightThread(function=simple_show, "Simple Show")
+    cycle_all_thread = ChristmasLightThread(function=cycle_all, "Cycle All")
     # collect threads
     threads = [
         blink_thread,
         allon_thread,
         randshow_thread,
         lightshow_thread,
+        simple_thread,
         cycle_all_thread
     ]
 
