@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from raspberry import RaspberryThread
+from xmasthread import ChristmasLightThread
 from light_functions import ojeblink, all_pins_off, light_show,\
 cycle_all, allon_show, random_show, simple_show, cleanup
 import os
