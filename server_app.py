@@ -83,12 +83,12 @@ def showthreads():
 
 if __name__ == '__main__':
     # Create threads
-    blink_thread = ChristmasLightThread(function=ojeblink, "Ojeblink")
-    allon_thread = ChristmasLightThread(function=allon_show, "All Lights On")
-    randshow_thread = ChristmasLightThread(function=random_show, "Random Show")
-    lightshow_thread = ChristmasLightThread(function=light_show, "Light Show")
-    simple_thread =  ChristmasLightThread(function=simple_show, "Simple Show")
-    cycle_all_thread = ChristmasLightThread(function=cycle_all, "Cycle All")
+    blink_thread = ChristmasLightThread("Ojeblink", function=ojeblink)
+    allon_thread = ChristmasLightThread("All Lights On", function=allon_show)
+    randshow_thread = ChristmasLightThread("Random Show", function=random_show)
+    lightshow_thread = ChristmasLightThread("Light Show", function=light_show)
+    simple_thread =  ChristmasLightThread("Simple Show", function=simple_show)
+    cycle_all_thread = ChristmasLightThread("Cycle All", function=cycle_all)
     # collect threads
     threads = [
         blink_thread,

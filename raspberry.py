@@ -1,7 +1,7 @@
 import threading
 
 class ChristmasLightThread(threading.Thread):
-    def __init__(self, function, name):
+    def __init__(self, name, function):
         self.paused = True
         self.state = threading.Condition()
         self.function = function
@@ -28,7 +28,7 @@ class ChristmasLightThread(threading.Thread):
 
     def pause(self):
         with self.state:
-            self.paused = True
+            self.paused = Truex
 
     def __repr__(self):
         return "ChristmasLightThread()"
